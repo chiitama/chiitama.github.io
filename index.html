@@ -19,13 +19,15 @@
   --font-jp: 'Noto Sans JP', sans-serif;
   --font-en: 'Montserrat', sans-serif;
   --marquee-h: 100px;
+  --nav-h: 100px;          /* ワークスリンクバーの高さ */
+  --header-total: 200px;   /* 固定ヘッダー合計（マーキー＋リンクバー）*/
 }
 
 * { box-sizing: border-box; }
 
 body {
   margin: 0;
-  padding-top: var(--marquee-h); /* 固定ヘッダー分だけコンテンツを押し下げ */
+  padding-top: var(--header-total); /* 固定ヘッダー合計分だけコンテンツを押し下げ */
   font-family: var(--font-jp);
   line-height: 1.8;
   background: var(--bg-color);
@@ -192,60 +194,74 @@ body {
 }
 
 /* ============================================================
-   制作物リンクセクション
+   固定ワークスリンクバー（マーキーの真下）
    ============================================================ */
 .works-link-section {
-  background: #111;
-  border-bottom: 1px solid #222;
-  padding: 40px 24px;
+  position: fixed;
+  top: var(--marquee-h);   /* マーキーのすぐ下 */
+  left: 0;
+  width: 100%;
+  height: var(--nav-h);
+  background: #0d0d0d;
+  border-bottom: 1px solid #1e1e1e;
+  z-index: 999;
+  display: flex;
 }
-.works-link-inner { max-width: 1100px; margin: auto; }
-.works-link-title {
-  font-family: var(--font-en);
-  font-size: 0.75rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--accent-color);
-  margin-bottom: 20px;
-  display: block;
-}
-.works-link-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
-}
+
+/* 2分割：左がチラシ、右が動画 */
 .works-link-card {
+  flex: 1;
   display: flex;
   align-items: center;
-  gap: 16px;
-  background: var(--card-bg);
-  border: 1px solid #2a2a2a;
-  border-radius: 12px;
-  padding: 20px 24px;
+  justify-content: center;
   text-decoration: none;
-  color: var(--text-main);
-  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  overflow: hidden;
+  position: relative;
+  transition: filter 0.25s ease;
 }
+
+/* 中央の仕切り線 */
+.works-link-card:first-child {
+  border-right: 1px solid #2a2a2a;
+}
+
+/* ホバーで少し明るく */
 .works-link-card:hover {
-  border-color: var(--accent-color);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(255,60,60,0.15);
+  filter: brightness(1.15);
 }
-.works-link-icon {
-  width: 48px; height: 48px;
-  border-radius: 10px;
-  background: rgba(255,60,60,0.1);
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; font-size: 1.4rem;
+
+/* サムネイル画像を幅いっぱい・高さ100pxにフィット */
+.works-link-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
 }
-.works-link-text strong { display: block; font-size: 1rem; font-weight: 700; margin-bottom: 2px; }
-.works-link-text span { font-size: 0.8rem; color: var(--text-sub); font-family: var(--font-en); letter-spacing: 0.05em; }
-.works-link-arrow {
-  margin-left: auto; color: var(--accent-color); font-size: 1.2rem;
-  opacity: 0; transform: translateX(-6px);
-  transition: opacity 0.3s, transform 0.3s;
+
+/* ラベルオーバーレイ（ホバー時に表示） */
+.works-link-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.52);
+  font-family: var(--font-en);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
 }
-.works-link-card:hover .works-link-arrow { opacity: 1; transform: translateX(0); }
+.works-link-card:hover .works-link-label {
+  opacity: 1;
+}
 
 /* ============================================================
    Common Layout
@@ -340,30 +356,20 @@ footer { text-align: center; padding: 60px 20px; background: #000; color: #666; 
 
 
 <!-- ============================================================
-     制作物リンク
+     固定ワークスリンクバー（マーキーの真下・高さ100px）
+     ▼ 各 img の src に実際のサムネイル画像パスを入れてください
      ============================================================ -->
 <div class="works-link-section">
-  <div class="works-link-inner">
-    <span class="works-link-title">Works Gallery</span>
-    <div class="works-link-grid">
-      <a href="/works/flyer.html" class="works-link-card">
-        <div class="works-link-icon">🖨️</div>
-        <div class="works-link-text">
-          <strong>チラシ・印刷物</strong>
-          <span>/works/flyer.html</span>
-        </div>
-        <div class="works-link-arrow">→</div>
-      </a>
-      <a href="/works/video.html" class="works-link-card">
-        <div class="works-link-icon">🎬</div>
-        <div class="works-link-text">
-          <strong>動画制作</strong>
-          <span>/works/video.html</span>
-        </div>
-        <div class="works-link-arrow">→</div>
-      </a>
-    </div>
-  </div>
+  <a href="/works/flyer.html" class="works-link-card">
+    <!-- チラシサムネイル画像（差し替えてください） -->
+    <img src="https://placehold.co/800x100/181818/ff3c3c?text=FLYER+%2F+PRINT" alt="チラシ・印刷物">
+    <span class="works-link-label">Flyer &amp; Print</span>
+  </a>
+  <a href="/works/video.html" class="works-link-card">
+    <!-- 動画サムネイル画像（差し替えてください） -->
+    <img src="https://placehold.co/800x100/181818/ff3c3c?text=VIDEO+%2F+MOVIE" alt="動画制作">
+    <span class="works-link-label">Video &amp; Movie</span>
+  </a>
 </div>
 
 
@@ -476,15 +482,15 @@ footer { text-align: center; padding: 60px 20px; background: #000; color: #666; 
   </div>
   <div class="contact-area">
     <p>制作のご相談や御見積はお気軽にご連絡ください。</p>
-    <a href="mailto:z50jamino@gmail.com" class="contact-mail">z50jamino@gmail.com</a>
-    <a href="mailto:z50jamino@gmail.com" class="btn">メールを送る</a>
+    <a href="/cdn-cgi/l/email-protection#afd59a9fc5cec2c6c1c0efc8c2cec6c381ccc0c2" class="contact-mail"><span class="__cf_email__" data-cfemail="89f3bcb9e3e8e4e0e7e6c9eee4e8e0e5a7eae6e4">[email&#160;protected]</span></a>
+    <a href="/cdn-cgi/l/email-protection#e399d6d389828e8a8d8ca3848e828a8fcd808c8e" class="btn">メールを送る</a>
   </div>
 </section>
 
 <footer>&copy; 2026 chiitama. All Rights Reserved.</footer>
 
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ============================================================
    マーキー制御
    ============================================================ */
@@ -555,12 +561,4 @@ footer { text-align: center; padding: 60px 20px; background: #000; color: #666; 
   overlay.addEventListener('click', closeModal);                         /* 背景クリック */
   imgWrap.addEventListener('click', e => e.stopPropagation());           /* 画像エリアは閉じない */
   closeBtn.addEventListener('click', closeModal);                        /* ✕ボタン */
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); }); /* ESCキー */
-  overlay.addEventListener('touchend', function (e) {                   /* スマホ背景タップ */
-    if (e.target === overlay) closeModal();
-  }, { passive: true });
-})();
-</script>
-
-</body>
-</html>
+  document.addEventListe
