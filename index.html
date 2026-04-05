@@ -18,14 +18,14 @@
   --text-sub: #b0b0b0;
   --font-jp: 'Noto Sans JP', sans-serif;
   --font-en: 'Montserrat', sans-serif;
+  --marquee-h: 100px;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
+  padding-top: var(--marquee-h); /* 固定ヘッダー分だけコンテンツを押し下げ */
   font-family: var(--font-jp);
   line-height: 1.8;
   background: var(--bg-color);
@@ -34,266 +34,360 @@ body {
   scroll-behavior: smooth;
 }
 
-/* Common Layout */
-section {
-  padding: 100px 24px;
-  max-width: 1100px;
-  margin: auto;
-}
-
-.section-title {
-  text-align: center;
-  margin-bottom: 60px;
-}
-
-.section-title h2 {
-  font-family: var(--font-en);
-  font-size: 2.5rem;
-  letter-spacing: 0.1em;
-  margin: 0;
-}
-
-.section-title .subtitle {
-  color: var(--accent-color);
-  font-size: 0.9rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  display: block;
-  margin-bottom: 8px;
-}
-
-/* Hero Section */
-.hero {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: radial-gradient(circle at center, #222 0%, #0a0a0a 100%);
-  text-align: center;
-  padding: 0 24px;
-  position: relative;
-  overflow: hidden;
-}
-
-.hero h1 {
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  line-height: 1.3;
-  margin-bottom: 24px;
-  font-weight: 700;
-}
-
-.hero p {
-  color: var(--text-sub);
-  font-size: 1.1rem;
-  margin-bottom: 40px;
-}
-
-.btn {
-  background: var(--accent-color);
-  padding: 18px 48px;
-  color: #fff;
-  text-decoration: none;
-  font-weight: 700;
-  border-radius: 50px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(255, 60, 60, 0.3);
-}
-
-.btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(255, 60, 60, 0.5);
-  background: #ff5555;
-}
-
-/* Portfolio Grid */
-.portfolio-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-}
-
-.portfolio-item {
-  position: relative;
-  padding-top: 56.25%; /* 16:9 Aspect Ratio */
-  background: #222;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.portfolio-item iframe {
-  position: absolute;
+/* ============================================================
+   固定マーキーヘッダー
+   ============================================================ */
+.marquee-header {
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
-  border: none;
+  height: var(--marquee-h);
+  background: #111;
+  border-bottom: 1px solid #1e1e1e;
+  overflow: hidden;
+  z-index: 1000;
+  will-change: transform;
 }
 
-/* Service Cards */
-.services-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 30px;
-}
-
-.card {
-  background: var(--card-bg);
-  padding: 40px 30px;
-  border-radius: 16px;
-  border: 1px solid #222;
-  transition: border-color 0.3s ease;
-}
-
-.card:hover {
-  border-color: var(--accent-color);
-}
-
-.card h3 {
-  font-size: 1.4rem;
-  margin-bottom: 16px;
-  color: var(--text-main);
-}
-
-.card p {
-  color: var(--text-sub);
-  font-size: 0.95rem;
-}
-
-/* Process Steps */
-.process-steps {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 10px;
-}
-
-.step {
-  text-align: center;
-  position: relative;
-  padding: 20px;
-}
-
-.step-num {
-  font-family: var(--font-en);
-  font-size: 3rem;
-  color: rgba(255, 60, 60, 0.1);
+/* 左右フェードマスク */
+.marquee-header::before,
+.marquee-header::after {
+  content: '';
   position: absolute;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  font-weight: 700;
-  line-height: 1;
+  width: 80px;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+.marquee-header::before {
+  left: 0;
+  background: linear-gradient(to right, #111 0%, transparent 100%);
+}
+.marquee-header::after {
+  right: 0;
+  background: linear-gradient(to left, #111 0%, transparent 100%);
 }
 
-.step-text {
+.marquee-track {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: max-content;
+  gap: 10px;
+  padding: 0 10px;
+  animation: marquee-scroll 60s linear infinite;
+  cursor: pointer;
+}
+
+.marquee-track.paused {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee-item {
+  height: 80px;
+  width: auto;
+  flex-shrink: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #222;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease, transform 0.2s ease;
   position: relative;
+}
+
+.marquee-item:hover {
+  opacity: 0.85;
+  transform: scale(1.04);
+}
+
+.marquee-item img {
+  height: 100%;
+  width: auto;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
+  min-width: 60px;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* ============================================================
+   モーダル（クリックで拡大表示）
+   ============================================================ */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  cursor: pointer;
+  animation: modal-fade-in 0.2s ease;
+}
+.modal-overlay.show {
+  display: flex;
+}
+@keyframes modal-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.modal-img-wrap {
+  position: relative;
+  max-width: 90vw;
+  max-height: 88vh;
+  cursor: default;
+  animation: modal-zoom-in 0.22s ease;
+}
+@keyframes modal-zoom-in {
+  from { transform: scale(0.93); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+
+.modal-img-wrap img {
+  display: block;
+  max-width: 100%;
+  max-height: 88vh;
+  border-radius: 10px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+  user-select: none;
+}
+
+.modal-close {
+  position: absolute;
+  top: -16px;
+  right: -16px;
+  width: 36px;
+  height: 36px;
+  background: var(--accent-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: #fff;
+  cursor: pointer;
+  line-height: 1;
+  box-shadow: 0 4px 12px rgba(255, 60, 60, 0.5);
+  transition: transform 0.2s ease, background 0.2s ease;
   z-index: 1;
-  font-weight: 700;
-  margin-top: 25px;
+  -webkit-tap-highlight-color: transparent;
+}
+.modal-close:hover {
+  transform: scale(1.15);
+  background: #ff5555;
 }
 
-/* Pricing Grid */
-.price-grid {
+/* ============================================================
+   制作物リンクセクション
+   ============================================================ */
+.works-link-section {
+  background: #111;
+  border-bottom: 1px solid #222;
+  padding: 40px 24px;
+}
+.works-link-inner { max-width: 1100px; margin: auto; }
+.works-link-title {
+  font-family: var(--font-en);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-color);
+  margin-bottom: 20px;
+  display: block;
+}
+.works-link-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
 }
-
-.price-card {
+.works-link-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
   background: var(--card-bg);
-  padding: 30px;
+  border: 1px solid #2a2a2a;
   border-radius: 12px;
-  text-align: center;
-}
-
-.price {
-  display: block;
-  font-family: var(--font-en);
-  font-size: 1.8rem;
-  color: var(--accent-color);
-  margin-top: 10px;
-}
-
-/* Profile Section */
-.profile-content {
-  background: linear-gradient(90deg, #161616, #0a0a0a);
-  padding: 40px;
-  border-radius: 20px;
-  border-left: 4px solid var(--accent-color);
-}
-
-/* FAQ */
-.faq-item {
-  margin-bottom: 16px;
-  background: var(--card-bg);
-  padding: 24px;
-  border-radius: 12px;
-}
-
-.faq-q {
-  font-weight: 700;
-  color: var(--accent-color);
-  margin-bottom: 8px;
-  display: block;
-}
-
-/* Contact */
-.contact-area {
-  text-align: center;
-}
-
-.contact-mail {
-  font-family: var(--font-en);
-  font-size: 1.5rem;
-  margin: 20px 0;
-  display: block;
-  color: var(--text-main);
+  padding: 20px 24px;
   text-decoration: none;
+  color: var(--text-main);
+  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
 }
-
-footer {
-  text-align: center;
-  padding: 60px 20px;
-  background: #000;
-  color: #666;
-  font-size: 0.8rem;
-  letter-spacing: 0.1em;
+.works-link-card:hover {
+  border-color: var(--accent-color);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(255,60,60,0.15);
 }
+.works-link-icon {
+  width: 48px; height: 48px;
+  border-radius: 10px;
+  background: rgba(255,60,60,0.1);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-size: 1.4rem;
+}
+.works-link-text strong { display: block; font-size: 1rem; font-weight: 700; margin-bottom: 2px; }
+.works-link-text span { font-size: 0.8rem; color: var(--text-sub); font-family: var(--font-en); letter-spacing: 0.05em; }
+.works-link-arrow {
+  margin-left: auto; color: var(--accent-color); font-size: 1.2rem;
+  opacity: 0; transform: translateX(-6px);
+  transition: opacity 0.3s, transform 0.3s;
+}
+.works-link-card:hover .works-link-arrow { opacity: 1; transform: translateX(0); }
 
-/* Responsive Fixes */
+/* ============================================================
+   Common Layout
+   ============================================================ */
+section { padding: 100px 24px; max-width: 1100px; margin: auto; }
+.section-title { text-align: center; margin-bottom: 60px; }
+.section-title h2 { font-family: var(--font-en); font-size: 2.5rem; letter-spacing: 0.1em; margin: 0; }
+.section-title .subtitle { color: var(--accent-color); font-size: 0.9rem; font-weight: 700; text-transform: uppercase; display: block; margin-bottom: 8px; }
+
+.hero {
+  height: 100vh;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  background: radial-gradient(circle at center, #222 0%, #0a0a0a 100%);
+  text-align: center; padding: 0 24px; position: relative; overflow: hidden;
+}
+.hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.3; margin-bottom: 24px; font-weight: 700; }
+.hero p { color: var(--text-sub); font-size: 1.1rem; margin-bottom: 40px; }
+.btn {
+  background: var(--accent-color); padding: 18px 48px; color: #fff;
+  text-decoration: none; font-weight: 700; border-radius: 50px;
+  transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(255,60,60,0.3);
+}
+.btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(255,60,60,0.5); background: #ff5555; }
+
+.portfolio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+.portfolio-item { position: relative; padding-top: 56.25%; background: #222; border-radius: 12px; overflow: hidden; }
+.portfolio-item iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+
+.services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+.card { background: var(--card-bg); padding: 40px 30px; border-radius: 16px; border: 1px solid #222; transition: border-color 0.3s; }
+.card:hover { border-color: var(--accent-color); }
+.card h3 { font-size: 1.4rem; margin-bottom: 16px; }
+.card p { color: var(--text-sub); font-size: 0.95rem; }
+
+.process-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+.step { text-align: center; position: relative; padding: 20px; }
+.step-num { font-family: var(--font-en); font-size: 3rem; color: rgba(255,60,60,0.1); position: absolute; top: 0; left: 50%; transform: translateX(-50%); font-weight: 700; line-height: 1; }
+.step-text { position: relative; z-index: 1; font-weight: 700; margin-top: 25px; }
+
+.price-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+.price-card { background: var(--card-bg); padding: 30px; border-radius: 12px; text-align: center; }
+.price { display: block; font-family: var(--font-en); font-size: 1.8rem; color: var(--accent-color); margin-top: 10px; }
+
+.profile-content { background: linear-gradient(90deg, #161616, #0a0a0a); padding: 40px; border-radius: 20px; border-left: 4px solid var(--accent-color); }
+
+.faq-item { margin-bottom: 16px; background: var(--card-bg); padding: 24px; border-radius: 12px; }
+.faq-q { font-weight: 700; color: var(--accent-color); margin-bottom: 8px; display: block; }
+
+.contact-area { text-align: center; }
+.contact-mail { font-family: var(--font-en); font-size: 1.5rem; margin: 20px 0; display: block; color: var(--text-main); text-decoration: none; }
+
+footer { text-align: center; padding: 60px 20px; background: #000; color: #666; font-size: 0.8rem; letter-spacing: 0.1em; }
+
 @media (max-width: 768px) {
   section { padding: 60px 20px; }
   .hero h1 { font-size: 1.8rem; }
+  .modal-close { top: -12px; right: -12px; width: 32px; height: 32px; font-size: 0.9rem; }
 }
 </style>
 </head>
 
 <body>
 
+<!-- ============================================================
+     固定マーキーヘッダー
+     ▼ 画像を差し替えるときは src="" を実際のパスに変更してください
+     ============================================================ -->
+<header class="marquee-header">
+  <div class="marquee-track" id="marqueeTrack">
+
+    <!-- ▼▼▼ この中の画像を実際のサンプルに差し替えてください ▼▼▼ -->
+    <div class="marquee-item"><img src="https://placehold.co/160x80/1a1a1a/ff3c3c?text=flyer+01" alt="チラシ01"></div>
+    <div class="marquee-item"><img src="https://placehold.co/120x80/1a1a1a/ff3c3c?text=video+01" alt="動画サムネ01"></div>
+    <div class="marquee-item"><img src="https://placehold.co/200x80/1a1a1a/ff3c3c?text=flyer+02" alt="チラシ02"></div>
+    <div class="marquee-item"><img src="https://placehold.co/140x80/1a1a1a/ff3c3c?text=video+02" alt="動画サムネ02"></div>
+    <div class="marquee-item"><img src="https://placehold.co/180x80/1a1a1a/ff3c3c?text=flyer+03" alt="チラシ03"></div>
+    <div class="marquee-item"><img src="https://placehold.co/100x80/1a1a1a/ff3c3c?text=video+03" alt="動画サムネ03"></div>
+    <div class="marquee-item"><img src="https://placehold.co/220x80/1a1a1a/ff3c3c?text=flyer+04" alt="チラシ04"></div>
+    <div class="marquee-item"><img src="https://placehold.co/130x80/1a1a1a/ff3c3c?text=video+04" alt="動画サムネ04"></div>
+    <!-- ▲▲▲ ここまで差し替え対象 ▲▲▲ -->
+
+  </div>
+</header>
+
+<!-- モーダル（拡大表示） -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-img-wrap" id="modalImgWrap">
+    <div class="modal-close" id="modalClose">✕</div>
+    <img id="modalImg" src="" alt="拡大画像">
+  </div>
+</div>
+
+
+<!-- ============================================================
+     制作物リンク
+     ============================================================ -->
+<div class="works-link-section">
+  <div class="works-link-inner">
+    <span class="works-link-title">Works Gallery</span>
+    <div class="works-link-grid">
+      <a href="/works/flyer.html" class="works-link-card">
+        <div class="works-link-icon">🖨️</div>
+        <div class="works-link-text">
+          <strong>チラシ・印刷物</strong>
+          <span>/works/flyer.html</span>
+        </div>
+        <div class="works-link-arrow">→</div>
+      </a>
+      <a href="/works/video.html" class="works-link-card">
+        <div class="works-link-icon">🎬</div>
+        <div class="works-link-text">
+          <strong>動画制作</strong>
+          <span>/works/video.html</span>
+        </div>
+        <div class="works-link-arrow">→</div>
+      </a>
+    </div>
+  </div>
+</div>
+
+
+<!-- Hero -->
 <section class="hero">
   <h1>魅せて伝える映像で<br>商品・企画の価値を最大化</h1>
   <p>商品PR・SNS動画・店舗紹介動画制作</p>
   <a href="#contact" class="btn">CONTACT</a>
 </section>
 
+<!-- Portfolio -->
 <section id="portfolio">
   <div class="section-title">
     <span class="subtitle">Works</span>
     <h2>制作実績</h2>
   </div>
   <div class="portfolio-grid">
-    <div class="portfolio-item">
-      <iframe src="https://www.youtube.com/embed/DOfxDNZ6n68" allowfullscreen></iframe>
-    </div>
-    <div class="portfolio-item">
-      <iframe src="https://www.youtube.com/embed/k8uN_FbnnOw" allowfullscreen></iframe>
-    </div>
-    <div class="portfolio-item">
-      <iframe src="https://www.youtube.com/embed/5ceUtWamu08" allowfullscreen></iframe>
-    </div>
+    <div class="portfolio-item"><iframe src="https://www.youtube.com/embed/DOfxDNZ6n68" allowfullscreen></iframe></div>
+    <div class="portfolio-item"><iframe src="https://www.youtube.com/embed/k8uN_FbnnOw" allowfullscreen></iframe></div>
+    <div class="portfolio-item"><iframe src="https://www.youtube.com/embed/5ceUtWamu08" allowfullscreen></iframe></div>
   </div>
 </section>
 
+<!-- Services -->
 <section id="services">
   <div class="section-title">
     <span class="subtitle">Services</span>
@@ -315,6 +409,7 @@ footer {
   </div>
 </section>
 
+<!-- Process -->
 <section>
   <div class="section-title">
     <span class="subtitle">Process</span>
@@ -329,34 +424,27 @@ footer {
   </div>
 </section>
 
+<!-- Pricing -->
 <section id="pricing">
   <div class="section-title">
     <span class="subtitle">Price</span>
     <h2>料金目安</h2>
   </div>
   <div class="price-grid">
-    <div class="price-card">
-      商品紹介動画<br>
-      <span class="price">¥30,000〜</span>
-    </div>
-    <div class="price-card">
-      SNSショート動画<br>
-      <span class="price">¥10,000〜</span>
-    </div>
+    <div class="price-card">商品紹介動画<br><span class="price">¥30,000〜</span></div>
+    <div class="price-card">SNSショート動画<br><span class="price">¥10,000〜</span></div>
   </div>
 </section>
 
+<!-- Profile -->
 <section id="profile">
   <div class="section-title">
     <span class="subtitle">Creator</span>
     <h2>プロフィール</h2>
   </div>
   <div class="profile-content">
-    <p>
-      大阪を拠点に活動する映像・デザインクリエイター。<br>
-      商品や企画、店舗の魅力を分かりやすく伝える映像制作・デザインを得意としています。
-    </p>
-    <p style="font-size: 0.9rem; color: var(--text-sub);">
+    <p>大阪を拠点に活動する映像・デザインクリエイター。<br>商品や企画、店舗の魅力を分かりやすく伝える映像制作・デザインを得意としています。</p>
+    <p style="font-size:0.9rem;color:var(--text-sub);">
       【動画】Youtube、リール、デジタルサイネージ等<br>
       【紙面】チラシ、パンフレット、カタログ制作、POP作成<br>
       撮影から編集、納品まで一貫してサポートいたします。
@@ -364,6 +452,7 @@ footer {
   </div>
 </section>
 
+<!-- FAQ -->
 <section>
   <div class="section-title">
     <span class="subtitle">Q&A</span>
@@ -379,6 +468,7 @@ footer {
   </div>
 </section>
 
+<!-- Contact -->
 <section id="contact">
   <div class="section-title">
     <span class="subtitle">Contact</span>
@@ -391,9 +481,86 @@ footer {
   </div>
 </section>
 
-<footer>
-  &copy; 2026 chiitama. All Rights Reserved.
-</footer>
+<footer>&copy; 2026 chiitama. All Rights Reserved.</footer>
+
+
+<script>
+/* ============================================================
+   マーキー制御
+   ============================================================ */
+(function () {
+  const track  = document.getElementById('marqueeTrack');
+  const header = track.closest('.marquee-header');
+  if (!track) return;
+
+  /* 1) 要素を複製してシームレスループ */
+  function cloneItems() {
+    if (track.dataset.cloned) return;
+    track.dataset.cloned = '1';
+    Array.from(track.children).forEach(el => {
+      const clone = el.cloneNode(true);
+      clone.setAttribute('aria-hidden', 'true');
+      track.appendChild(clone);
+    });
+  }
+
+  /* 2) 幅に合わせてアニメーション速度を計算 */
+  function calcSpeed() {
+    const halfWidth = track.scrollWidth / 2;
+    const pxPerSec  = 80; /* ← 速さ調整用（px/秒）*/
+    track.style.animationDuration = (halfWidth / pxPerSec) + 's';
+  }
+
+  /* 3) ホバー／タッチで一時停止 */
+  header.addEventListener('mouseenter', () => track.classList.add('paused'));
+  header.addEventListener('mouseleave', () => track.classList.remove('paused'));
+  header.addEventListener('touchstart', () => track.classList.add('paused'),    { passive: true });
+  header.addEventListener('touchend',   () => track.classList.remove('paused'), { passive: true });
+
+  cloneItems();
+  window.addEventListener('load', calcSpeed);
+  calcSpeed();
+})();
+
+
+/* ============================================================
+   モーダル（クリックで拡大表示）
+   ============================================================ */
+(function () {
+  const overlay  = document.getElementById('modalOverlay');
+  const modalImg = document.getElementById('modalImg');
+  const closeBtn = document.getElementById('modalClose');
+  const imgWrap  = document.getElementById('modalImgWrap');
+
+  /* マーキー内アイテムをクリック → モーダルを開く */
+  document.getElementById('marqueeTrack').addEventListener('click', function (e) {
+    const item = e.target.closest('.marquee-item');
+    if (!item) return;
+    const img = item.querySelector('img');
+    if (!img) return;
+
+    modalImg.src = img.src;
+    modalImg.alt = img.alt;
+    overlay.classList.add('show');
+    document.body.style.overflow = 'hidden'; /* スクロール禁止 */
+  });
+
+  /* モーダルを閉じる */
+  function closeModal() {
+    overlay.classList.remove('show');
+    document.body.style.overflow = '';
+    setTimeout(() => { modalImg.src = ''; }, 300);
+  }
+
+  overlay.addEventListener('click', closeModal);                         /* 背景クリック */
+  imgWrap.addEventListener('click', e => e.stopPropagation());           /* 画像エリアは閉じない */
+  closeBtn.addEventListener('click', closeModal);                        /* ✕ボタン */
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); }); /* ESCキー */
+  overlay.addEventListener('touchend', function (e) {                   /* スマホ背景タップ */
+    if (e.target === overlay) closeModal();
+  }, { passive: true });
+})();
+</script>
 
 </body>
 </html>
