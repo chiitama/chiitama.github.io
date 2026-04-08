@@ -332,16 +332,52 @@ footer { text-align: center; padding: 60px 20px; background: #000; color: #666; 
 <header class="marquee-header">
   <div class="marquee-track" id="marqueeTrack">
 
-    <!-- ▼▼▼ この中の画像を実際のサンプルに差し替えてください ▼▼▼ -->
-    <div class="marquee-item"><img src="https://placehold.co/160x80/1a1a1a/ff3c3c?text=flyer+01" alt="チラシ01"></div>
-    <div class="marquee-item"><img src="https://placehold.co/120x80/1a1a1a/ff3c3c?text=video+01" alt="動画サムネ01"></div>
-    <div class="marquee-item"><img src="https://placehold.co/200x80/1a1a1a/ff3c3c?text=flyer+02" alt="チラシ02"></div>
-    <div class="marquee-item"><img src="https://placehold.co/140x80/1a1a1a/ff3c3c?text=video+02" alt="動画サムネ02"></div>
-    <div class="marquee-item"><img src="https://placehold.co/180x80/1a1a1a/ff3c3c?text=flyer+03" alt="チラシ03"></div>
-    <div class="marquee-item"><img src="https://placehold.co/100x80/1a1a1a/ff3c3c?text=video+03" alt="動画サムネ03"></div>
-    <div class="marquee-item"><img src="https://placehold.co/220x80/1a1a1a/ff3c3c?text=flyer+04" alt="チラシ04"></div>
-    <div class="marquee-item"><img src="https://placehold.co/130x80/1a1a1a/ff3c3c?text=video+04" alt="動画サムネ04"></div>
-    <!-- ▲▲▲ ここまで差し替え対象 ▲▲▲ -->
+    <!--
+    ================================================================
+    画像の指定方法
+    ----------------------------------------------------------------
+    【チラシ】クリックで高画質版をモーダル表示したい場合
+      → data-full に高画質画像のパスを追加する
+      <div class="marquee-item" data-full="/images/flyer01_large.jpg">
+        <img src="/images/flyer01_thumb.jpg" alt="チラシ01">
+      </div>
+
+    【動画】クリックで別タブにリンクしたい場合
+      → data-link にURLを追加する
+      <div class="marquee-item" data-link="https://youtu.be/xxxxx">
+        <img src="/images/video01_thumb.jpg" alt="動画01">
+      </div>
+
+    ※ data-full も data-link もない場合はサムネをそのまま拡大表示
+    ================================================================
+    -->
+
+    <!-- チラシ例（高画質モーダル） -->
+    <div class="marquee-item" data-full="https://placehold.co/1200x800/1a1a1a/ff3c3c?text=flyer+01+%5BLARGE%5D">
+      <img src="https://placehold.co/160x80/1a1a1a/ff3c3c?text=flyer+01" alt="チラシ01">
+    </div>
+    <!-- 動画例（リンクで飛ぶ） -->
+    <div class="marquee-item" data-link="https://youtu.be/DOfxDNZ6n68">
+      <img src="https://placehold.co/120x80/1a1a1a/ff3c3c?text=video+01" alt="動画サムネ01">
+    </div>
+    <div class="marquee-item" data-full="https://placehold.co/1200x800/1a1a1a/ff3c3c?text=flyer+02+%5BLARGE%5D">
+      <img src="https://placehold.co/200x80/1a1a1a/ff3c3c?text=flyer+02" alt="チラシ02">
+    </div>
+    <div class="marquee-item" data-link="https://youtu.be/k8uN_FbnnOw">
+      <img src="https://placehold.co/140x80/1a1a1a/ff3c3c?text=video+02" alt="動画サムネ02">
+    </div>
+    <div class="marquee-item" data-full="https://placehold.co/1200x800/1a1a1a/ff3c3c?text=flyer+03+%5BLARGE%5D">
+      <img src="https://placehold.co/180x80/1a1a1a/ff3c3c?text=flyer+03" alt="チラシ03">
+    </div>
+    <div class="marquee-item" data-link="https://youtu.be/5ceUtWamu08">
+      <img src="https://placehold.co/100x80/1a1a1a/ff3c3c?text=video+03" alt="動画サムネ03">
+    </div>
+    <div class="marquee-item" data-full="https://placehold.co/1200x800/1a1a1a/ff3c3c?text=flyer+04+%5BLARGE%5D">
+      <img src="https://placehold.co/220x80/1a1a1a/ff3c3c?text=flyer+04" alt="チラシ04">
+    </div>
+    <div class="marquee-item" data-link="https://youtu.be/DOfxDNZ6n68">
+      <img src="https://placehold.co/130x80/1a1a1a/ff3c3c?text=video+04" alt="動画サムネ04">
+    </div>
 
   </div>
 </header>
@@ -387,9 +423,9 @@ footer { text-align: center; padding: 60px 20px; background: #000; color: #666; 
     <h2>制作実績</h2>
   </div>
   <div class="portfolio-grid">
-    <div class="portfolio-item"><iframe src="" allowfullscreen></iframe></div>
-    <div class="portfolio-item"><iframe src="" allowfullscreen></iframe></div>
-    <div class="portfolio-item"><iframe src="" allowfullscreen></iframe></div>
+    <div class="portfolio-item"><iframe src="https://www.youtube.com/embed/DOfxDNZ6n68" allowfullscreen></iframe></div>
+    <div class="portfolio-item"><iframe src="https://www.youtube.com/embed/k8uN_FbnnOw" allowfullscreen></iframe></div>
+    <div class="portfolio-item"><iframe src="https://www.youtube.com/embed/5ceUtWamu08" allowfullscreen></iframe></div>
   </div>
 </section>
 
@@ -481,14 +517,11 @@ footer { text-align: center; padding: 60px 20px; background: #000; color: #666; 
     <h2>お問い合わせ</h2>
   </div>
   <div class="contact-area">
-    <p>制作のご相談や御見積はお気軽にご連絡ください。</p>          ← 文言
-    <a href="mailto:z50jamino@gmail.com" class="contact-mail">
-      z50jamino@gmail.com                                          ← 表示メアド
-    </a>
-    <a href="mailto:z50jamino@gmail.com" class="btn">メールを送る</a>  ← ボタンのリンク
+    <p>制作のご相談や御見積はお気軽にご連絡ください。</p>
+    <a href="/cdn-cgi/l/email-protection#afd59a9fc5cec2c6c1c0efc8c2cec6c381ccc0c2" class="contact-mail"><span class="__cf_email__" data-cfemail="89f3bcb9e3e8e4e0e7e6c9eee4e8e0e5a7eae6e4">[email&#160;protected]</span></a>
+    <a href="/cdn-cgi/l/email-protection#e399d6d389828e8a8d8ca3848e828a8fcd808c8e" class="btn">メールを送る</a>
   </div>
 </section>
-
 
 <footer>&copy; 2026 chiitama. All Rights Reserved.</footer>
 
@@ -541,17 +574,24 @@ footer { text-align: center; padding: 60px 20px; background: #000; color: #666; 
   const closeBtn = document.getElementById('modalClose');
   const imgWrap  = document.getElementById('modalImgWrap');
 
-  /* マーキー内アイテムをクリック → モーダルを開く */
+  /* マーキー内アイテムをクリック */
   document.getElementById('marqueeTrack').addEventListener('click', function (e) {
     const item = e.target.closest('.marquee-item');
     if (!item) return;
+
+    /* ① data-link があれば別タブでURLに飛ぶ */
+    if (item.dataset.link) {
+      window.open(item.dataset.link, '_blank', 'noopener noreferrer');
+      return;
+    }
+
+    /* ② data-full があれば高画質版をモーダル表示、なければサムネをそのまま表示 */
     const img = item.querySelector('img');
     if (!img) return;
-
-    modalImg.src = img.src;
+    modalImg.src = item.dataset.full || img.src;
     modalImg.alt = img.alt;
     overlay.classList.add('show');
-    document.body.style.overflow = 'hidden'; /* スクロール禁止 */
+    document.body.style.overflow = 'hidden';
   });
 
   /* モーダルを閉じる */
@@ -565,3 +605,4 @@ footer { text-align: center; padding: 60px 20px; background: #000; color: #666; 
   imgWrap.addEventListener('click', e => e.stopPropagation());           /* 画像エリアは閉じない */
   closeBtn.addEventListener('click', closeModal);                        /* ✕ボタン */
   document.addEventListe
+  
